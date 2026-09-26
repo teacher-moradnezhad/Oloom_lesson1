@@ -1,0 +1,2099 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#8fd0ff">
+<title>کارآگاه علمی — زنگ علوم</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --blue:#2f6fed;
+  --blue-dark:#174bb5;
+  --green:#2bb37a;
+  --yellow:#ffd166;
+  --red:#ef476f;
+  --ink:#17324d;
+  --muted:#5e7890;
+  --white:#fff;
+  --shadow:0 16px 45px rgba(34,76,112,.18);
+}
+
+*{box-sizing:border-box}
+
+html,body{
+  margin:0;
+  width:100%;
+  height:100%;
+  overflow:hidden;
+}
+
+body{
+  font-family:"Vazirmatn",Tahoma,sans-serif;
+  background:#8fd0ff;
+  color:var(--ink);
+  touch-action:none;
+  -webkit-user-select:none;
+  user-select:none;
+}
+
+button,input{
+  font:inherit;
+}
+
+button{
+  border:0;
+  cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+}
+
+.screen{
+  position:fixed;
+  inset:0;
+  display:none;
+  overflow:hidden;
+}
+
+.screen.active{
+  display:flex;
+}
+
+#home,
+#end{
+  align-items:center;
+  justify-content:center;
+  padding:18px;
+  background:
+    radial-gradient(circle at 15% 15%,rgba(255,255,255,.8),transparent 24%),
+    linear-gradient(135deg,#8fd0ff,#eaf7ff);
+  overflow:auto;
+}
+
+.card{
+  width:min(940px,96vw);
+  max-height:94vh;
+  overflow:auto;
+  background:rgba(255,255,255,.94);
+  border:1px solid rgba(255,255,255,.8);
+  border-radius:30px;
+  box-shadow:var(--shadow);
+  padding:30px;
+  text-align:center;
+}
+
+.home-top{
+  display:flex;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-bottom:12px;
+}
+
+.badge{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:8px 14px;
+  border-radius:999px;
+  font-size:13px;
+  font-weight:800;
+  background:#eaf3ff;
+  color:var(--blue-dark);
+}
+
+.badge.teacher{
+  background:#e9fff5;
+  color:#16865a;
+}
+
+h1{
+  margin:8px 0 8px;
+  font-size:clamp(28px,5vw,50px);
+  line-height:1.2;
+  color:#174b82;
+}
+
+.subtitle{
+  margin:0 auto 20px;
+  max-width:650px;
+  line-height:2;
+  color:var(--muted);
+  font-size:16px;
+}
+
+.welcome{
+  color:#35607f;
+  font-size:20px;
+  font-weight:800;
+}
+
+.info-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+  margin:18px 0;
+}
+
+.info-box{
+  background:#f5faff;
+  border-radius:18px;
+  padding:13px;
+}
+
+.info-box b{
+  display:block;
+  color:#1f5585;
+  margin-bottom:3px;
+}
+
+.info-box span{
+  font-size:13px;
+  color:#67829a;
+}
+
+.name-wrap{
+  max-width:500px;
+  margin:20px auto 12px;
+}
+
+.name-wrap input{
+  width:100%;
+  border:2px solid #d8e9f7;
+  border-radius:17px;
+  padding:14px 18px;
+  outline:none;
+  color:var(--ink);
+  background:#fbfdff;
+  text-align:right;
+  transition:.2s;
+}
+
+.name-wrap input:focus{
+  border-color:#6da5ee;
+  box-shadow:0 0 0 4px rgba(47,111,237,.1);
+}
+
+.actions{
+  display:flex;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-top:12px;
+}
+
+.btn{
+  min-height:48px;
+  padding:11px 22px;
+  border-radius:16px;
+  font-weight:800;
+  transition:transform .15s,box-shadow .15s;
+}
+
+.btn:hover{
+  transform:translateY(-2px);
+}
+
+.btn.primary{
+  color:#fff;
+  background:linear-gradient(135deg,#2f6fed,#174bb5);
+  box-shadow:0 9px 22px rgba(47,111,237,.28);
+}
+
+.btn.secondary{
+  color:#175183;
+  background:#eaf5ff;
+}
+
+.btn.green{
+  color:#fff;
+  background:linear-gradient(135deg,#2bb37a,#16865a);
+}
+
+.btn.small{
+  min-height:42px;
+  padding:8px 14px;
+  border-radius:13px;
+}
+
+.hint{
+  font-size:12px;
+  color:#7890a3;
+  margin-top:13px;
+}
+
+#game{
+  position:fixed;
+  inset:0;
+  display:none;
+  overflow:hidden;
+  background:#8fd0ff;
+}
+
+#game.active{
+  display:block;
+}
+
+#gameCanvas{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  z-index:1;
+  display:block;
+}
+
+.hud{
+  position:absolute;
+  inset:0;
+  z-index:10;
+  pointer-events:none;
+  padding:12px;
+}
+
+.hud>*{
+  pointer-events:auto;
+}
+
+.hud-row{
+  width:100%;
+  display:grid;
+  grid-template-columns:1fr auto 1fr;
+  align-items:start;
+  gap:10px;
+}
+
+.hud-side{
+  display:flex;
+  align-items:center;
+  gap:7px;
+}
+
+.hud-side.right{
+  justify-content:flex-start;
+}
+
+.hud-side.left{
+  justify-content:flex-end;
+}
+
+.hud-pill{
+  background:rgba(255,255,255,.9);
+  border:1px solid rgba(255,255,255,.7);
+  box-shadow:0 7px 20px rgba(30,80,120,.13);
+  border-radius:15px;
+  padding:8px 12px;
+  font-weight:800;
+  color:#214a6c;
+  backdrop-filter:blur(7px);
+  -webkit-backdrop-filter:blur(7px);
+  white-space:nowrap;
+}
+
+#hearts{
+  letter-spacing:1px;
+  font-size:17px;
+}
+
+#phaseText{
+  font-size:12px;
+}
+
+.score{
+  text-align:center;
+  min-width:125px;
+}
+
+.score small{
+  display:block;
+  color:#6c879b;
+  font-size:11px;
+}
+
+.score strong{
+  display:block;
+  font-size:22px;
+  color:#174b82;
+}
+
+.icon-btn{
+  width:42px;
+  height:42px;
+  padding:0;
+  border-radius:13px;
+  background:rgba(255,255,255,.94);
+  color:#214d70;
+  box-shadow:0 7px 20px rgba(30,80,120,.13);
+  font-size:19px;
+}
+
+.progress-wrap{
+  position:absolute;
+  top:73px;
+  left:12px;
+  right:12px;
+  height:7px;
+  border-radius:20px;
+  background:rgba(255,255,255,.45);
+  overflow:hidden;
+  pointer-events:none;
+}
+
+#progress{
+  width:0%;
+  height:100%;
+  background:linear-gradient(90deg,#2bb37a,#ffd166,#ef476f);
+  transition:width .15s linear;
+}
+
+#questionOverlay{
+  position:absolute;
+  inset:0;
+  z-index:30;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:82px 16px 20px;
+  background:rgba(17,48,73,.32);
+  backdrop-filter:blur(5px);
+  -webkit-backdrop-filter:blur(5px);
+  pointer-events:auto;
+}
+
+#questionOverlay.show{
+  display:flex;
+}
+
+.question-shell{
+  width:min(780px,96vw);
+  max-height:90vh;
+  display:grid;
+  grid-template-columns:18px 1fr;
+  gap:14px;
+  align-items:stretch;
+}
+
+.question-timer{
+  position:relative;
+  min-height:450px;
+  border-radius:15px;
+  overflow:hidden;
+  background:rgba(255,255,255,.75);
+  box-shadow:0 10px 30px rgba(25,70,100,.16);
+}
+
+#questionTimerFill{
+  position:absolute;
+  top:0;
+  left:0;
+  right:0;
+  height:100%;
+  background:#2bb37a;
+  transform-origin:top;
+}
+
+.question-card{
+  overflow:auto;
+  background:rgba(255,255,255,.97);
+  border-radius:26px;
+  padding:25px;
+  box-shadow:0 20px 60px rgba(19,58,90,.25);
+}
+
+.question-meta{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  color:#668096;
+  font-size:13px;
+  font-weight:700;
+}
+
+.question-card h2{
+  font-size:clamp(19px,3vw,27px);
+  line-height:1.8;
+  color:#174b82;
+  margin:18px 0;
+}
+
+.options{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:11px;
+}
+
+.option{
+  min-height:62px;
+  padding:12px 15px;
+  border:2px solid #dceaf4;
+  border-radius:17px;
+  background:#fafdff;
+  color:#214c6e;
+  text-align:right;
+  font-weight:700;
+  line-height:1.7;
+  transition:.15s;
+}
+
+.option:hover:not(:disabled){
+  border-color:#78aef0;
+  background:#f0f7ff;
+  transform:translateY(-1px);
+}
+
+.option.correct{
+  border-color:#2bb37a;
+  background:#e7fff3;
+  color:#14724d;
+}
+
+.option.wrong{
+  border-color:#ef476f;
+  background:#fff0f4;
+  color:#b7284d;
+}
+
+.option:disabled{
+  cursor:default;
+}
+
+.explanation{
+  display:none;
+  margin-top:16px;
+  padding:15px;
+  border-radius:17px;
+  background:#fff9e7;
+  border:1px solid #ffe19a;
+  color:#6b5318;
+  line-height:1.9;
+  font-size:14px;
+}
+
+.explanation.show{
+  display:block;
+}
+
+.continue{
+  display:none;
+  margin-top:14px;
+  width:100%;
+  min-height:56px;
+  position:sticky;
+  bottom:0;
+  z-index:5;
+  box-shadow:0 -8px 18px rgba(255,255,255,.92);
+}
+
+.continue.show{
+  display:block;
+}
+
+.end-stats{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:10px;
+  margin:20px 0;
+}
+
+.stat{
+  background:#f4f9fd;
+  border-radius:18px;
+  padding:15px 8px;
+}
+
+.stat b{
+  display:block;
+  font-size:22px;
+  color:#174b82;
+}
+
+.stat span{
+  color:#6c8598;
+  font-size:12px;
+}
+
+.end-message{
+  padding:13px 17px;
+  background:#eef8ff;
+  border-radius:17px;
+  line-height:1.8;
+  color:#365c76;
+}
+
+.review{
+  margin-top:18px;
+  text-align:right;
+  max-height:250px;
+  overflow:auto;
+}
+
+.review h3{
+  margin:0 0 9px;
+  color:#174b82;
+}
+
+.review-item{
+  padding:12px;
+  margin:7px 0;
+  border-radius:14px;
+  background:#fff4f5;
+  border-right:4px solid #ef476f;
+}
+
+.review-item b{
+  display:block;
+  color:#7e2942;
+  margin-bottom:4px;
+}
+
+.review-item span{
+  font-size:13px;
+  color:#63798a;
+  line-height:1.7;
+}
+
+#lessonModal{
+  position:fixed;
+  inset:0;
+  z-index:100;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:15px;
+  background:rgba(15,45,68,.5);
+  backdrop-filter:blur(5px);
+  -webkit-backdrop-filter:blur(5px);
+}
+
+#lessonModal.show{
+  display:flex;
+}
+
+.lesson-card{
+  width:min(900px,97vw);
+  max-height:92vh;
+  overflow:hidden;
+  background:#fff;
+  border-radius:26px;
+  box-shadow:0 25px 80px rgba(10,45,75,.3);
+  display:flex;
+  flex-direction:column;
+}
+
+.lesson-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  padding:17px 20px;
+  border-bottom:1px solid #e8f0f5;
+}
+
+.lesson-head h2{
+  margin:0;
+  color:#174b82;
+  font-size:21px;
+}
+
+.lesson-tabs{
+  display:flex;
+  gap:7px;
+  padding:11px;
+  overflow-x:auto;
+  border-bottom:1px solid #edf2f5;
+  scrollbar-width:none;
+}
+
+.lesson-tabs::-webkit-scrollbar{display:none}
+
+.tab{
+  flex:0 0 auto;
+  padding:9px 14px;
+  border-radius:13px;
+  background:#f1f6fa;
+  color:#57738a;
+  font-weight:700;
+  font-size:13px;
+}
+
+.tab.active{
+  background:#2f6fed;
+  color:#fff;
+}
+
+.lesson-content{
+  overflow:auto;
+  padding:20px;
+  line-height:2;
+  color:#47657a;
+}
+
+.lesson-content h3{
+  color:#174b82;
+  margin-top:0;
+}
+
+.lesson-content ul{
+  padding-right:22px;
+}
+
+.lesson-content li{
+  margin:5px 0;
+}
+
+.concept{
+  background:#f4faff;
+  border-right:4px solid #2f6fed;
+  padding:13px 16px;
+  border-radius:13px;
+  margin:10px 0;
+}
+
+.objects{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:9px;
+}
+
+.object-item{
+  padding:12px;
+  border-radius:14px;
+  background:#f7fafc;
+  display:flex;
+  justify-content:space-between;
+  gap:8px;
+  align-items:center;
+}
+
+.object-item b{
+  font-size:21px;
+}
+
+.object-item span{
+  font-size:12px;
+  color:#5f7586;
+}
+
+.close-btn{
+  width:39px;
+  height:39px;
+  border-radius:12px;
+  background:#eef5fa;
+  color:#365d78;
+  font-size:18px;
+}
+
+.paused-screen{
+  position:absolute;
+  inset:0;
+  z-index:25;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  background:rgba(17,48,73,.18);
+}
+
+.paused-screen.show{
+  display:flex;
+}
+
+.pause-card{
+  padding:25px;
+  background:rgba(255,255,255,.95);
+  border-radius:23px;
+  text-align:center;
+  box-shadow:var(--shadow);
+}
+
+.pause-card h2{
+  color:#174b82;
+  margin:0 0 8px;
+}
+
+#toast{
+  position:fixed;
+  z-index:200;
+  left:50%;
+  bottom:25px;
+  transform:translate(-50%,20px);
+  opacity:0;
+  pointer-events:none;
+  padding:10px 17px;
+  border-radius:999px;
+  color:#fff;
+  background:rgba(23,55,78,.9);
+  box-shadow:0 10px 30px rgba(0,0,0,.18);
+  transition:.25s;
+  font-size:13px;
+  white-space:nowrap;
+}
+
+#toast.show{
+  opacity:1;
+  transform:translate(-50%,0);
+}
+
+.shake{
+  animation:shake .34s ease;
+}
+
+@keyframes shake{
+  0%,100%{transform:translate3d(0,0,0)}
+  20%{transform:translate3d(-9px,2px,0)}
+  40%{transform:translate3d(8px,-2px,0)}
+  60%{transform:translate3d(-6px,1px,0)}
+  80%{transform:translate3d(5px,-1px,0)}
+}
+
+@media(max-width:650px){
+  .card{padding:21px;border-radius:24px}
+  .info-grid{grid-template-columns:1fr}
+  .info-box{padding:9px}
+  .hud{padding:8px}
+  .hud-row{grid-template-columns:1fr auto 1fr;gap:4px}
+  .hud-pill{padding:7px 8px;font-size:11px}
+  .score{min-width:82px}
+  .score strong{font-size:18px}
+  .score small{font-size:9px}
+  .icon-btn{width:37px;height:37px}
+  .progress-wrap{top:61px;left:8px;right:8px}
+  .question-shell{grid-template-columns:12px 1fr;gap:8px}
+  .question-card{padding:18px;border-radius:21px}
+  .question-timer{min-height:390px}
+  .options{grid-template-columns:1fr}
+  .option{min-height:54px}
+  .end-stats{grid-template-columns:1fr 1fr}
+  .objects{grid-template-columns:1fr}
+  h1{font-size:31px}
+}
+
+@media(min-width:900px){
+  #gameCanvas{image-rendering:auto}
+}
+</style>
+</head>
+
+<body>
+
+<section id="home" class="screen active">
+  <div class="card">
+    <div class="welcome">به نام خدا</div>
+
+    <div class="home-top">
+      <span class="badge">علوم تجربی پایه پنجم — درس ۱: زنگ علوم</span>
+      <span class="badge teacher">آموزگار: خانم مرادنژاد</span>
+    </div>
+
+    <h1>🕵️‍♂️ کارآگاه علمی — زنگ علوم</h1>
+
+    <p class="subtitle">
+      در این مأموریت علمی، با فرفره‌ی خود در آزمایشگاه پرواز کن،
+      وسایل مفید را جمع کن و با پاسخ دادن به پرسش‌های درس «زنگ علوم»
+      رازهای کاوشگری را کشف کن!
+    </p>
+
+    <div class="info-grid">
+      <div class="info-box">
+        <b>🏫 مدرسه</b>
+        <span>دبستان پسرانه امام رضا (ع)</span>
+      </div>
+      <div class="info-box">
+        <b>📚 درس</b>
+        <span>زنگ علوم</span>
+      </div>
+      <div class="info-box">
+        <b>👨‍🎓 کلاس</b>
+        <span>۵/۳</span>
+      </div>
+    </div>
+
+    <div class="name-wrap">
+      <input id="studentName" type="text" maxlength="30" autocomplete="off"
+             placeholder="نام کارآگاه را وارد کن">
+    </div>
+
+    <div class="actions">
+      <button id="startBtn" class="btn primary">🚀 شروع مأموریت</button>
+      <button id="homeLessonBtn" class="btn secondary">📚 درس‌نامه</button>
+    </div>
+
+    <div class="hint">۱۵ مرحله • ۱۵ سؤال • ۳ جان • بهترین امتیاز ذخیره می‌شود</div>
+  </div>
+</section>
+
+<section id="game" class="screen">
+  <canvas id="gameCanvas"></canvas>
+
+  <div class="hud">
+    <div class="hud-row">
+      <div class="hud-side right">
+        <div class="hud-pill" id="hearts">❤️❤️❤️</div>
+        <div class="hud-pill" id="phaseText">سؤال بعدی تا ۱۰ ثانیه</div>
+      </div>
+
+      <div class="hud-pill score">
+        <small>امتیاز</small>
+        <strong id="scoreText">۰</strong>
+      </div>
+
+      <div class="hud-side left">
+        <button id="lessonGameBtn" class="icon-btn" aria-label="درس‌نامه">📚</button>
+        <button id="pauseBtn" class="icon-btn" aria-label="توقف">⏸</button>
+      </div>
+    </div>
+
+    <div class="progress-wrap">
+      <div id="progress"></div>
+    </div>
+  </div>
+
+  <div id="pauseOverlay" class="paused-screen">
+    <div class="pause-card">
+      <h2>⏸ بازی متوقف است</h2>
+      <p>هر وقت آماده بودی، ادامه بده.</p>
+      <button id="resumeBtn" class="btn primary">▶️ ادامه</button>
+    </div>
+  </div>
+
+  <div id="questionOverlay">
+    <div class="question-shell">
+      <div class="question-timer">
+        <div id="questionTimerFill"></div>
+      </div>
+
+      <div class="question-card">
+        <div class="question-meta">
+          <span id="questionNumber">سؤال ۱ از ۱۵</span>
+          <span id="questionTime">۶۰ ثانیه</span>
+        </div>
+
+        <h2 id="questionText"></h2>
+
+        <div id="options" class="options"></div>
+
+        <div id="explanation" class="explanation"></div>
+
+        <button id="continueBtn" type="button" class="btn green continue">
+          ➡️ سؤال بعدی
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="end" class="screen">
+  <div class="card">
+    <div style="font-size:54px">🏆</div>
+    <h1>پایان مأموریت</h1>
+    <p id="endName" class="welcome"></p>
+    <div id="endMessage" class="end-message"></div>
+
+    <div class="end-stats">
+      <div class="stat">
+        <b id="finalScore">۰</b>
+        <span>امتیاز</span>
+      </div>
+      <div class="stat">
+        <b id="finalCorrect">۰</b>
+        <span>پاسخ درست</span>
+      </div>
+      <div class="stat">
+        <b id="finalWrong">۰</b>
+        <span>پاسخ غلط</span>
+      </div>
+      <div class="stat">
+        <b id="finalLives">۰</b>
+        <span>جان باقی‌مانده</span>
+      </div>
+    </div>
+
+    <div class="end-message">
+      🥇 بهترین رکورد: <strong id="bestScore">۰</strong>
+    </div>
+
+    <div class="review" id="reviewBox"></div>
+
+    <div class="actions">
+      <button id="restartBtn" class="btn primary">🔄 شروع مجدد</button>
+      <button id="homeBtn" class="btn secondary">🏠 بازگشت به خانه</button>
+      <button id="endLessonBtn" class="btn secondary">📚 درس‌نامه</button>
+    </div>
+  </div>
+</section>
+
+<div id="lessonModal">
+  <div class="lesson-card">
+    <div class="lesson-head">
+      <h2>📚 درس‌نامه زنگ علوم</h2>
+      <button id="closeLesson" class="close-btn">✕</button>
+    </div>
+
+    <div class="lesson-tabs">
+      <button class="tab active" data-tab="show">تماشاخانه</button>
+      <button class="tab" data-tab="inquiry">کاوشگری</button>
+      <button class="tab" data-tab="hypothesis">فرضیه</button>
+      <button class="tab" data-tab="variables">متغیرها</button>
+      <button class="tab" data-tab="conclusion">نتیجه‌گیری</button>
+      <button class="tab" data-tab="scientist">کار دانشمند</button>
+      <button class="tab" data-tab="objects">راهنمای اشیاء</button>
+    </div>
+
+    <div id="lessonContent" class="lesson-content"></div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+"use strict";
+
+const canvas = document.getElementById("gameCanvas");
+const ctx = canvas.getContext("2d");
+const gameScreen = document.getElementById("game");
+const homeScreen = document.getElementById("home");
+const endScreen = document.getElementById("end");
+
+let W = 0;
+let H = 0;
+let dpr = 1;
+
+let animationId = null;
+let lastTime = 0;
+let gameRunning = false;
+let gamePaused = false;
+let questionActive = false;
+let questionAnswered = false;
+let questionTimerId = null;
+let toastTimer = null;
+
+let audioCtx = null;
+
+const BEST_KEY = "sci_detective_best_v3";
+
+const state = {
+  studentName: "",
+  score: 0,
+  lives: 3,
+  correct: 0,
+  wrong: 0,
+  questionIndex: 0,
+  flightSeconds: 10,
+  questionSeconds: 60,
+  level: 1,
+  shield: 0,
+  objects: [],
+  particles: [],
+  clouds: [],
+  stars: [],
+  wrongQuestions: [],
+  spawnTimer: 0,
+  shake: 0,
+  backgroundTime: 0
+};
+
+const spinner = {
+  x: 180,
+  y: 250,
+  r: 28,
+  vy: 0,
+  rotation: 0
+};
+
+const questions = [
+  {
+    q:"کاوشگری با کدام مرحله شروع می‌شود؟",
+    options:["مشاهده","نتیجه‌گیری","آزمایش","فرضیه"],
+    answer:0,
+    explanation:"کاوش علمی با مشاهده آغاز می‌شود. دانشمند ابتدا با دقت به پدیده‌ها نگاه می‌کند و اطلاعات جمع می‌کند."
+  },
+  {
+    q:"ترتیب درست مراحل کاوشگری کدام است؟",
+    options:[
+      "مشاهده، پرسش، فرضیه، آزمایش، نتیجه‌گیری",
+      "آزمایش، مشاهده، نتیجه‌گیری، فرضیه، پرسش",
+      "فرضیه، مشاهده، آزمایش، پرسش، نتیجه‌گیری",
+      "پرسش، نتیجه‌گیری، مشاهده، آزمایش، فرضیه"
+    ],
+    answer:0,
+    explanation:"یک مسیر معمول کاوشگری این است: مشاهده، پرسش، فرضیه، آزمایش و در پایان نتیجه‌گیری."
+  },
+  {
+    q:"فرضیه یعنی چه؟",
+    options:[
+      "یک حدس علمی که باید آزمایش شود",
+      "پاسخ قطعی و تغییرناپذیر",
+      "نام یک ابزار اندازه‌گیری",
+      "نتیجه‌ای که قبل از آزمایش به دست می‌آید"
+    ],
+    answer:0,
+    explanation:"فرضیه یک حدس علمی و قابل آزمایش است. با انجام آزمایش بررسی می‌کنیم که آیا این حدس با شواهد سازگار است یا نه."
+  },
+  {
+    q:"در آزمایش فرفره چه چیزی را تغییر دادیم؟",
+    options:["پهنای بال","جنس کاغذ","زمان آزمایش","رنگ فرفره"],
+    answer:0,
+    explanation:"در آزمایش فرفره، پهنای بال را تغییر می‌دهیم تا اثر آن را بر زمان سقوط بررسی کنیم."
+  },
+  {
+    q:"در آزمایش فرفره چه چیزی را اندازه گرفتیم؟",
+    options:["زمان رسیدن به زمین","رنگ بال","وزن دانش‌آموز","پهنای میز"],
+    answer:0,
+    explanation:"زمان رسیدن فرفره به زمین اندازه‌گیری می‌شود تا بتوانیم فرفره‌ها را با هم مقایسه کنیم."
+  },
+  {
+    q:"کدام مورد جزء متغیرهای ثابت است؟",
+    options:["جنس کاغذ","پهنای بال","زمان رسیدن به زمین","نتیجه آزمایش"],
+    answer:0,
+    explanation:"برای مقایسه منصفانه، بعضی ویژگی‌ها مثل جنس کاغذ باید ثابت بمانند و فقط متغیر مورد بررسی تغییر کند."
+  },
+  {
+    q:"نتیجه آزمایش فرفره چه بود؟",
+    options:[
+      "بال پهن‌تر، سقوط دیرتر",
+      "بال پهن‌تر، سقوط سریع‌تر",
+      "رنگ بال، زمان سقوط را تعیین می‌کند",
+      "هرچه کاغذ کوچک‌تر باشد، سقوط دیرتر است"
+    ],
+    answer:0,
+    explanation:"در این آزمایش، فرفره‌ای که بال پهن‌تری دارد معمولاً مدت بیشتری در هوا می‌ماند و دیرتر به زمین می‌رسد."
+  },
+  {
+    q:"چرا فقط یک چیز را تغییر می‌دهیم؟",
+    options:[
+      "تا اثر همان متغیر مشخص شود",
+      "تا آزمایش خیلی سخت شود",
+      "برای اینکه نتیجه را حدس بزنیم",
+      "چون ابزار دیگری نداریم"
+    ],
+    answer:0,
+    explanation:"اگر چند چیز را هم‌زمان تغییر دهیم، نمی‌دانیم کدام تغییر باعث نتیجه شده است. پس برای آزمایش منصفانه یک متغیر را تغییر می‌دهیم."
+  },
+  {
+    q:"کار دانشمندان شبیه کار چه کسی است؟",
+    options:["کارآگاه","راننده","نقاش","ورزشکار"],
+    answer:0,
+    explanation:"دانشمند مانند یک کارآگاه، با مشاهده و جمع‌آوری شواهد، پرسش مطرح می‌کند و برای یافتن پاسخ آزمایش انجام می‌دهد."
+  },
+  {
+    q:"مرحله آخر کاوشگری چیست؟",
+    options:["نتیجه‌گیری","مشاهده","پرسش","فرضیه"],
+    answer:0,
+    explanation:"پس از انجام آزمایش و بررسی داده‌ها، نتیجه‌گیری می‌کنیم و مشخص می‌کنیم شواهد چه چیزی را نشان می‌دهند."
+  },
+  {
+    q:"اگر آزمایش با فرضیه مخالف بود، چه کار می‌کنیم؟",
+    options:[
+      "آزمایش را تکرار و فرضیه را اصلاح می‌کنیم",
+      "نتیجه را نادیده می‌گیریم",
+      "داده‌ها را حذف می‌کنیم",
+      "می‌گوییم آزمایش هیچ فایده‌ای ندارد"
+    ],
+    answer:0,
+    explanation:"نتیجه مخالف فرضیه هم ارزش علمی دارد. می‌توانیم آزمایش را با دقت تکرار کنیم و در صورت نیاز فرضیه را اصلاح کنیم."
+  },
+  {
+    q:"کدام مورد از شگفتی‌های آفرینش است؟",
+    options:["همه موارد: خاک، پرنده و ستاره","فقط خاک","فقط پرنده","فقط ستاره"],
+    answer:0,
+    explanation:"خاک، پرندگان، ستارگان و بسیاری از پدیده‌های طبیعت می‌توانند موضوع مشاهده، تفکر و شناخت شگفتی‌های آفرینش باشند."
+  },
+  {
+    q:"چرا آزمایش را چند بار تکرار می‌کنیم؟",
+    options:[
+      "برای دقیق‌تر شدن نتیجه",
+      "برای طولانی شدن آزمایش",
+      "برای تغییر دادن همه متغیرها",
+      "برای اینکه پاسخ را حدس بزنیم"
+    ],
+    answer:0,
+    explanation:"تکرار آزمایش کمک می‌کند خطاهای اتفاقی کمتر اثر بگذارند و نتیجه قابل اعتمادتر شود."
+  },
+  {
+    q:"ابزار اندازه‌گیری زمان چیست؟",
+    options:["زمان‌سنج (کرنومتر)","ترازو","خط‌کش","دماسنج"],
+    answer:0,
+    explanation:"برای اندازه‌گیری مدت زمان یک رویداد، مانند زمان سقوط فرفره، می‌توانیم از زمان‌سنج یا کرنومتر استفاده کنیم."
+  },
+  {
+    q:"راه شناخت عالم چیست؟",
+    options:[
+      "خوب دیدن و اندیشیدن",
+      "فقط حفظ کردن",
+      "فقط حدس زدن",
+      "فقط نگاه کردن بدون فکر کردن"
+    ],
+    answer:0,
+    explanation:"با دقت دیدن، پرسیدن، اندیشیدن، آزمایش کردن و نتیجه‌گیری می‌توانیم شناخت خود را از جهان پیرامون بیشتر کنیم."
+  }
+];
+
+const itemTypes = [
+  {type:"diamond", emoji:"💎", positive:true, points:10, color:"#48b8ff"},
+  {type:"star", emoji:"⭐", positive:true, points:20, color:"#ffd166", shield:2},
+  {type:"book", emoji:"📖", positive:true, points:30, color:"#9b6cff"},
+  {type:"tube", emoji:"🧪", positive:true, points:15, color:"#2bb37a"},
+  {type:"microscope", emoji:"🔬", positive:true, points:25, color:"#4679c9"},
+  {type:"magnet", emoji:"🧲", positive:true, points:20, color:"#ef476f"},
+  {type:"bomb", emoji:"💣", positive:false, points:0, color:"#3d4650"},
+  {type:"fire", emoji:"🔥", positive:false, points:0, color:"#ff7043"},
+  {type:"poison", emoji:"☠️", positive:false, points:0, color:"#9c6ade"},
+  {type:"electric", emoji:"⚡", positive:false, points:0, color:"#f5c400"}
+];
+
+function fa(value){
+  return String(value).replace(/\d/g, d => "۰۱۲۳۴۵۶۷۸۹"[d]);
+}
+
+function showScreen(id){
+  document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+}
+
+function ensureAudio(){
+  if(!audioCtx){
+    const AC = window.AudioContext || window.webkitAudioContext;
+    if(AC) audioCtx = new AC();
+  }
+  if(audioCtx && audioCtx.state === "suspended"){
+    audioCtx.resume();
+  }
+}
+
+function tone(freq, duration, type="sine", volume=.08, delay=0){
+  if(!audioCtx) return;
+  const start = audioCtx.currentTime + delay;
+  const osc = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
+
+  osc.type = type;
+  osc.frequency.setValueAtTime(freq,start);
+
+  gain.gain.setValueAtTime(0.0001,start);
+  gain.gain.exponentialRampToValueAtTime(Math.max(.0001,volume),start+.008);
+  gain.gain.exponentialRampToValueAtTime(.0001,start+duration);
+
+  osc.connect(gain);
+  gain.connect(audioCtx.destination);
+  osc.start(start);
+  osc.stop(start+duration+.02);
+}
+
+function soundJump(){
+  tone(400,.05,"triangle",.1);
+}
+
+function soundCollect(){
+  tone(880,.09,"sine",.08,0);
+  tone(1174,.11,"sine",.08,.09);
+}
+
+function soundCorrect(){
+  tone(660,.11,"sine",.08,0);
+  tone(880,.11,"sine",.08,.12);
+  tone(1100,.16,"sine",.08,.24);
+}
+
+function soundWrong(){
+  tone(330,.13,"sine",.08,0);
+  tone(260,.18,"sine",.08,.14);
+}
+
+function soundTick(){
+  tone(1000,.06,"square",.06);
+}
+
+function soundWin(){
+  [523,659,784,1046,1318].forEach((f,i)=>tone(f,.16,"sine",.08,i*.12));
+}
+
+function showToast(text){
+  const el = document.getElementById("toast");
+  el.textContent = text;
+  el.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>el.classList.remove("show"),1600);
+}
+
+function resizeCanvas(){
+  W = canvas.clientWidth;
+  H = canvas.clientHeight;
+
+  if(W === 0 || H === 0) return false;
+
+  dpr = Math.min(window.devicePixelRatio || 1,2);
+  canvas.width = Math.round(W*dpr);
+  canvas.height = Math.round(H*dpr);
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+
+  if(spinner.y > H - spinner.r) spinner.y = H/2;
+  if(spinner.y < spinner.r) spinner.y = H/2;
+  spinner.x = Math.max(spinner.r+20, Math.min(W*.25, W-spinner.r));
+
+  state.clouds.forEach((cloud,i)=>{
+    if(cloud.y > H*.65) cloud.y = H*(.1+(i%5)*.1);
+  });
+
+  return true;
+}
+
+const ro = new ResizeObserver(() => {
+  resizeCanvas();
+});
+ro.observe(canvas);
+
+function initBackground(){
+  state.stars = [];
+  for(let i=0;i<40;i++){
+    state.stars.push({
+      x:Math.random()*Math.max(W,1),
+      y:Math.random()*Math.max(H*.48,1),
+      r:Math.random()*1.7+.5,
+      phase:Math.random()*Math.PI*2,
+      speed:.7+Math.random()*1.7
+    });
+  }
+
+  state.clouds = [];
+  for(let i=0;i<5;i++){
+    state.clouds.push({
+      x:Math.random()*W,
+      y:H*(.09+i*.11),
+      scale:.65+Math.random()*.65,
+      speed:8+Math.random()*12
+    });
+  }
+}
+
+function resetGameState(){
+  state.score = 0;
+  state.lives = 3;
+  state.correct = 0;
+  state.wrong = 0;
+  state.questionIndex = 0;
+  state.flightSeconds = 10;
+  state.questionSeconds = 60;
+  state.level = 1;
+  state.shield = 0;
+  state.objects = [];
+  state.particles = [];
+  state.spawnTimer = .7;
+  state.shake = 0;
+  state.backgroundTime = 0;
+  state.wrongQuestions = [];
+
+  spinner.x = Math.max(100,W*.18);
+  spinner.y = H*.5;
+  spinner.vy = 0;
+  spinner.rotation = 0;
+
+  gamePaused = false;
+  questionActive = false;
+  questionAnswered = false;
+
+  updateHUD();
+}
+
+function updateHUD(){
+  document.getElementById("hearts").textContent =
+    "❤️".repeat(Math.max(0,state.lives)) + "🖤".repeat(Math.max(0,3-state.lives));
+
+  document.getElementById("scoreText").textContent = fa(Math.max(0,state.score));
+
+  const shownFlight = Math.max(0,Math.ceil(state.flightSeconds));
+  document.getElementById("phaseText").textContent =
+    `سؤال بعدی تا ${fa(shownFlight)} ثانیه`;
+
+  const progress = Math.min(100,(state.questionIndex/questions.length)*100);
+  document.getElementById("progress").style.width = progress+"%";
+}
+
+function levelSpeed(){
+  return 120 + Math.max(0,state.questionIndex)*9;
+}
+
+function spawnObject(){
+  const positive = Math.random() < .65;
+  const pool = itemTypes.filter(x => x.positive === positive);
+  const base = pool[Math.floor(Math.random()*pool.length)];
+
+  const margin = 70;
+  const top = Math.max(90,margin);
+  const bottom = Math.max(top+40,H-50);
+  const y = top + Math.random()*Math.max(20,bottom-top);
+
+  state.objects.push({
+    ...base,
+    x:W+55,
+    y,
+    size:positive ? 31+Math.random()*5 : 32+Math.random()*5,
+    phase:Math.random()*Math.PI*2,
+    rot:(Math.random()-.5)*1.5
+  });
+}
+
+function addParticles(x,y,color,count=14){
+  for(let i=0;i<count;i++){
+    const a=Math.random()*Math.PI*2;
+    const speed=60+Math.random()*180;
+    state.particles.push({
+      x,y,
+      vx:Math.cos(a)*speed,
+      vy:Math.sin(a)*speed,
+      life:.35+Math.random()*.5,
+      maxLife:.85,
+      size:2+Math.random()*4,
+      color
+    });
+  }
+}
+
+function circleHit(a,b){
+  const dx=a.x-b.x;
+  const dy=a.y-b.y;
+  const rr=a.r+b.size*.55;
+  return dx*dx+dy*dy<rr*rr;
+}
+
+function collectObject(obj){
+  if(obj.positive){
+    state.score += obj.points;
+    if(obj.shield){
+      state.shield = 2;
+      showToast("⭐ سپر محافظ فعال شد!");
+    }else{
+      showToast(`${obj.emoji} +${fa(obj.points)} امتیاز`);
+    }
+    soundCollect();
+    addParticles(obj.x,obj.y,obj.color,18);
+  }else{
+    if(state.shield>0){
+      showToast("🛡️ سپر از تو محافظت کرد!");
+      addParticles(obj.x,obj.y,"#65c7ff",20);
+      soundCollect();
+    }else{
+      state.lives--;
+      state.shake=.38;
+      gameScreen.classList.remove("shake");
+      void gameScreen.offsetWidth;
+      gameScreen.classList.add("shake");
+      addParticles(obj.x,obj.y,"#ef476f",24);
+      soundWrong();
+      showToast("💥 یک جان کم شد!");
+      if(state.lives<=0){
+        state.lives=0;
+        finishGame();
+        return;
+      }
+    }
+  }
+  updateHUD();
+}
+
+function updateFlight(dt){
+  state.backgroundTime += dt;
+
+  if(state.shield>0){
+    state.shield=Math.max(0,state.shield-dt);
+  }
+
+  spinner.vy += 680*dt;
+  spinner.y += spinner.vy*dt;
+  spinner.rotation += dt*10;
+
+  if(spinner.y-spinner.r<0){
+    spinner.y=spinner.r;
+    spinner.vy=0;
+  }
+
+  if(spinner.y+spinner.r>H){
+    spinner.y=H-spinner.r;
+    spinner.vy=0;
+  }
+
+  state.spawnTimer -= dt;
+  if(state.spawnTimer<=0){
+    spawnObject();
+    state.spawnTimer=.85+Math.random()*.7;
+  }
+
+  const speed=levelSpeed();
+
+  for(let i=state.objects.length-1;i>=0;i--){
+    const obj=state.objects[i];
+    obj.x -= speed*dt;
+    obj.phase += dt*3;
+
+    if(circleHit(spinner,obj)){
+      collectObject(obj);
+      state.objects.splice(i,1);
+      continue;
+    }
+
+    if(obj.x<-80){
+      state.objects.splice(i,1);
+    }
+  }
+
+  for(let i=state.particles.length-1;i>=0;i--){
+    const p=state.particles[i];
+    p.life-=dt;
+    p.x+=p.vx*dt;
+    p.y+=p.vy*dt;
+    p.vy+=190*dt;
+    if(p.life<=0) state.particles.splice(i,1);
+  }
+
+  for(const cloud of state.clouds){
+    cloud.x-=cloud.speed*dt;
+    if(cloud.x<-180*cloud.scale){
+      cloud.x=W+180*cloud.scale;
+      cloud.y=H*(.07+Math.random()*.5);
+    }
+  }
+
+  state.shake=Math.max(0,state.shake-dt);
+
+  state.flightSeconds-=dt;
+  if(state.flightSeconds<=0){
+    state.flightSeconds=0;
+    beginQuestion();
+  }
+
+  updateHUD();
+}
+
+function drawBackground(){
+  const gradient=ctx.createLinearGradient(0,0,0,H);
+  gradient.addColorStop(0,"#8fd0ff");
+  gradient.addColorStop(1,"#eaf7ff");
+  ctx.fillStyle=gradient;
+  ctx.fillRect(0,0,W,H);
+
+  const starTime=performance.now()/1000;
+  for(const s of state.stars){
+    const alpha=.25+.45*(.5+.5*Math.sin(starTime*s.speed+s.phase));
+    ctx.globalAlpha=alpha;
+    ctx.fillStyle="#fff";
+    ctx.beginPath();
+    ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+    ctx.fill();
+  }
+  ctx.globalAlpha=1;
+
+  for(const c of state.clouds){
+    drawCloud(c.x,c.y,c.scale);
+  }
+
+  const horizon=ctx.createLinearGradient(0,H*.72,0,H);
+  horizon.addColorStop(0,"rgba(255,255,255,0)");
+  horizon.addColorStop(1,"rgba(255,255,255,.55)");
+  ctx.fillStyle=horizon;
+  ctx.fillRect(0,H*.65,W,H*.35);
+}
+
+function drawCloud(x,y,scale){
+  ctx.save();
+  ctx.translate(x,y);
+  ctx.scale(scale,scale);
+  ctx.fillStyle="rgba(255,255,255,.76)";
+  ctx.beginPath();
+  ctx.arc(-45,8,28,0,Math.PI*2);
+  ctx.arc(-15,-8,37,0,Math.PI*2);
+  ctx.arc(20,2,31,0,Math.PI*2);
+  ctx.arc(50,11,23,0,Math.PI*2);
+  ctx.fill();
+  ctx.restore();
+}
+
+function drawSpinner(){
+  ctx.save();
+
+  const shakeX=state.shake>0 ? (Math.random()-.5)*8 : 0;
+  const shakeY=state.shake>0 ? (Math.random()-.5)*5 : 0;
+
+  ctx.translate(spinner.x+shakeX,spinner.y+shakeY);
+
+  if(state.shield>0){
+    const pulse=1+Math.sin(performance.now()/90)*.04;
+    ctx.save();
+    ctx.scale(pulse,pulse);
+    ctx.shadowBlur=24;
+    ctx.shadowColor="#53bfff";
+    ctx.strokeStyle="rgba(52,174,255,.88)";
+    ctx.lineWidth=5;
+    ctx.beginPath();
+    ctx.arc(0,0,spinner.r+13,0,Math.PI*2);
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  ctx.save();
+  ctx.rotate(spinner.rotation);
+
+  ctx.fillStyle="#e84949";
+  ctx.beginPath();
+  ctx.moveTo(-spinner.r*.75,4);
+  ctx.lineTo(-spinner.r*2.0,14);
+  ctx.lineTo(-spinner.r*.75,13);
+  ctx.closePath();
+  ctx.fill();
+
+  for(let i=0;i<4;i++){
+    ctx.rotate(Math.PI/2);
+    ctx.fillStyle=i%2===0 ? "#2f6fed" : "#2bb37a";
+    ctx.beginPath();
+    ctx.moveTo(0,-4);
+    ctx.quadraticCurveTo(spinner.r*.75,-spinner.r*.95,spinner.r*.98,-spinner.r*.15);
+    ctx.quadraticCurveTo(spinner.r*.55,.03,0,4);
+    ctx.closePath();
+    ctx.fill();
+  }
+
+  ctx.restore();
+
+  ctx.fillStyle="#ffd166";
+  ctx.shadowBlur=8;
+  ctx.shadowColor="rgba(255,209,102,.7)";
+  ctx.beginPath();
+  ctx.arc(0,0,9,0,Math.PI*2);
+  ctx.fill();
+
+  ctx.shadowBlur=0;
+  ctx.fillStyle="#fff4b8";
+  ctx.beginPath();
+  ctx.arc(-2,-2,3,0,Math.PI*2);
+  ctx.fill();
+
+  ctx.restore();
+}
+
+function drawObjects(){
+  for(const obj of state.objects){
+    const bob=Math.sin(obj.phase)*3;
+    ctx.save();
+    ctx.translate(obj.x,obj.y+bob);
+    ctx.rotate(Math.sin(obj.phase*.7)*.08);
+
+    ctx.font=`${obj.size}px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif`;
+    ctx.textAlign="center";
+    ctx.textBaseline="middle";
+
+    ctx.shadowBlur=12;
+    ctx.shadowColor=obj.color;
+    ctx.fillText(obj.emoji,0,0);
+
+    ctx.restore();
+  }
+}
+
+function drawParticles(){
+  for(const p of state.particles){
+    ctx.save();
+    ctx.globalAlpha=Math.max(0,p.life/p.maxLife);
+    ctx.fillStyle=p.color;
+    ctx.beginPath();
+    ctx.arc(p.x,p.y,p.size,0,Math.PI*2);
+    ctx.fill();
+    ctx.restore();
+  }
+}
+
+function render(){
+  ctx.clearRect(0,0,W,H);
+  drawBackground();
+  drawObjects();
+  drawParticles();
+  drawSpinner();
+}
+
+function gameLoop(now){
+  if(!gameRunning) return;
+
+  let dt=Math.min((now-lastTime)/1000,.033);
+  lastTime=now;
+
+  if(!gamePaused && !questionActive){
+    updateFlight(dt);
+  }
+
+  render();
+  animationId=requestAnimationFrame(gameLoop);
+}
+
+function jump(){
+  if(!gameRunning || gamePaused || questionActive) return;
+  ensureAudio();
+  spinner.vy=-330;
+  soundJump();
+}
+
+gameScreen.addEventListener("touchstart",(e)=>{
+  if(e.target.closest("button")) return;
+  e.preventDefault();
+  jump();
+},{passive:false});
+
+gameScreen.addEventListener("mousedown",(e)=>{
+  if(e.target.closest("button")) return;
+  jump();
+});
+
+document.addEventListener("keydown",(e)=>{
+  if(e.code==="Space"){
+    e.preventDefault();
+    if(gameScreen.classList.contains("active")) jump();
+  }
+});
+
+function beginQuestion(){
+  if(questionActive || state.questionIndex>=questions.length) return;
+
+  gamePaused=true;
+  questionActive=true;
+  questionAnswered=false;
+  state.questionSeconds=60;
+
+  const q=questions[state.questionIndex];
+
+  document.getElementById("questionNumber").textContent =
+    `سؤال ${fa(state.questionIndex+1)} از ${fa(questions.length)}`;
+
+  document.getElementById("questionText").textContent=q.q;
+  document.getElementById("questionTime").textContent="۶۰ ثانیه";
+  document.getElementById("questionTimerFill").style.height="100%";
+  document.getElementById("questionTimerFill").style.background="#2bb37a";
+
+  const options=document.getElementById("options");
+  options.innerHTML="";
+
+  q.options.forEach((text,index)=>{
+    const button=document.createElement("button");
+    button.type="button";
+    button.className="option";
+    button.textContent=`${["الف","ب","ج","د"][index]}) ${text}`;
+    button.addEventListener("click",()=>answerQuestion(index),{once:true});
+    options.appendChild(button);
+  });
+
+  document.getElementById("explanation").classList.remove("show");
+  document.getElementById("explanation").textContent="";
+  document.getElementById("continueBtn").classList.remove("show");
+
+  document.getElementById("questionOverlay").classList.add("show");
+
+  clearInterval(questionTimerId);
+  questionTimerId=setInterval(()=>{
+    if(!questionActive || questionAnswered) return;
+
+    state.questionSeconds=Math.max(0,state.questionSeconds-1);
+
+    const fill=document.getElementById("questionTimerFill");
+    fill.style.height=(state.questionSeconds/60*100)+"%";
+
+    let color="#2bb37a";
+    if(state.questionSeconds<15) color="#ffd166";
+    if(state.questionSeconds<5) color="#ef476f";
+    fill.style.background=color;
+
+    document.getElementById("questionTime").textContent =
+      `${fa(state.questionSeconds)} ثانیه`;
+
+    if(state.questionSeconds<=15 && state.questionSeconds>0){
+      soundTick();
+    }
+
+    if(state.questionSeconds<=0){
+      clearInterval(questionTimerId);
+      answerQuestion(-1);
+    }
+  },1000);
+}
+
+function answerQuestion(index){
+  if(questionAnswered) return;
+
+  questionAnswered=true;
+  clearInterval(questionTimerId);
+
+  const q=questions[state.questionIndex];
+  const buttons=[...document.querySelectorAll(".option")];
+
+  buttons.forEach((button,i)=>{
+    button.disabled=true;
+    if(i===q.answer) button.classList.add("correct");
+    if(index===i && index!==q.answer) button.classList.add("wrong");
+  });
+
+  const explanation=document.getElementById("explanation");
+  explanation.innerHTML=`<strong>🔎 توضیح علمی:</strong> ${q.explanation}`;
+  explanation.classList.add("show");
+
+  if(index===q.answer){
+    state.correct++;
+    state.score+=50;
+    soundCorrect();
+    showToast("🎉 پاسخ درست! +۵۰ امتیاز");
+  }else{
+    state.wrong++;
+    state.lives--;
+    state.wrongQuestions.push({
+      question:q.q,
+      correct:q.options[q.answer],
+      selected:index>=0 ? q.options[index] : "زمان تمام شد"
+    });
+    soundWrong();
+    showToast(index<0 ? "⏰ زمان تمام شد! یک جان کم شد." : "❌ پاسخ نادرست! یک جان کم شد.");
+  }
+
+  updateHUD();
+
+  // دکمه ادامه را بلافاصله بعد از پاسخ در دسترس و قابل مشاهده کن.
+  const continueBtn=document.getElementById("continueBtn");
+  continueBtn.classList.add("show");
+  requestAnimationFrame(()=>{
+    continueBtn.scrollIntoView({behavior:"smooth",block:"center"});
+  });
+}
+
+document.getElementById("continueBtn").addEventListener("click",continueAdventure);
+
+function continueAdventure(){
+  // بدون پاسخ دادن، امکان رفتن به مرحله بعد وجود ندارد.
+  if(!questionAnswered) return;
+
+  // پنجره سؤال قبلی را ببند.
+  document.getElementById("questionOverlay").classList.remove("show");
+  document.getElementById("continueBtn").classList.remove("show");
+
+  // تایمر سؤال قبلی را کاملاً متوقف کن.
+  clearInterval(questionTimerId);
+  questionTimerId=null;
+
+  // اگر آخرین جان هم از دست رفته باشد، مأموریت تمام می‌شود.
+  if(state.lives<=0){
+    finishGame();
+    return;
+  }
+
+  // سؤال بعدی
+  state.questionIndex++;
+
+  // اگر همه سؤال‌ها تمام شده‌اند، پایان بازی.
+  if(state.questionIndex>=questions.length){
+    finishGame();
+    return;
+  }
+
+  // آماده‌سازی کامل پرواز و سؤال بعدی
+  state.level=1+Math.floor(state.questionIndex/3);
+  state.flightSeconds=10;
+  state.questionSeconds=60;
+  state.spawnTimer=.45;
+
+  // آزاد کردن بازی
+  questionActive=false;
+  questionAnswered=false;
+  gamePaused=false;
+
+  // پاک کردن وضعیت سؤال قبلی
+  const explanation=document.getElementById("explanation");
+  explanation.classList.remove("show");
+  explanation.innerHTML="";
+
+  document.querySelectorAll(".option").forEach(button=>{
+    button.disabled=false;
+    button.classList.remove("correct","wrong");
+  });
+
+  updateHUD();
+
+  // جلوگیری از پرش زمانی بعد از توقف سؤال
+  lastTime=performance.now();
+
+  // در حالت عادی حلقه از قبل فعال است.
+  // اگر به هر دلیل متوقف شده بود، دوباره آن را راه‌اندازی کن.
+  if(gameRunning && !animationId){
+    animationId=requestAnimationFrame(gameLoop);
+  }
+}
+
+function finishGame(){
+  gameRunning=false;
+  gamePaused=true;
+  questionActive=false;
+  questionAnswered=false;
+  clearInterval(questionTimerId);
+  questionTimerId=null;
+
+  if(animationId){
+    cancelAnimationFrame(animationId);
+    animationId=null;
+  }
+
+  document.getElementById("questionOverlay").classList.remove("show");
+  document.getElementById("pauseOverlay").classList.remove("show");
+
+  const previousBest=Number(localStorage.getItem(BEST_KEY)||0);
+  const best=Math.max(previousBest,state.score);
+  localStorage.setItem(BEST_KEY,String(best));
+
+  document.getElementById("endName").textContent =
+    `کارآگاه ${state.studentName || "علمی"}`;
+
+  document.getElementById("finalScore").textContent=fa(state.score);
+  document.getElementById("finalCorrect").textContent=fa(state.correct);
+  document.getElementById("finalWrong").textContent=fa(state.wrong);
+  document.getElementById("finalLives").textContent=fa(state.lives);
+  document.getElementById("bestScore").textContent=fa(best);
+
+  let message="";
+  if(state.score>=1000){
+    message="🌟 فوق‌العاده بود! تو مثل یک کارآگاه علمی با دقت مشاهده کردی، فکر کردی و پاسخ دادی.";
+  }else if(state.score>=600){
+    message="👏 عالی بود! مهارت‌های کاوشگری تو در حال قوی‌تر شدن است.";
+  }else if(state.score>=300){
+    message="💪 آفرین! یک مأموریت علمی خوب را پشت سر گذاشتی. حالا وقت مرور و کشف نکته‌های بیشتر است.";
+  }else{
+    message="🌱 هر آزمایش و هر اشتباه، فرصتی برای یادگیری است. درس‌نامه را مرور کن و دوباره تلاش کن!";
+  }
+
+  document.getElementById("endMessage").textContent=message;
+
+  const review=document.getElementById("reviewBox");
+  if(state.wrongQuestions.length){
+    review.innerHTML="<h3>📝 برای مرور</h3>";
+    state.wrongQuestions.forEach((item,i)=>{
+      const div=document.createElement("div");
+      div.className="review-item";
+      div.innerHTML=
+        `<b>${fa(i+1)}. ${item.question}</b>
+         <span>پاسخ تو: ${item.selected}<br>
+         پاسخ درست: ${item.correct}</span>`;
+      review.appendChild(div);
+    });
+  }else{
+    review.innerHTML=
+      "<h3>🌟 برای مرور</h3><div class=\"end-message\">همه‌ی سؤال‌ها را درست پاسخ دادی! مرور درس‌نامه هم می‌تواند دانسته‌هایت را محکم‌تر کند.</div>";
+  }
+
+  showScreen("end");
+  soundWin();
+}
+
+function startMission(){
+  ensureAudio();
+
+  const input=document.getElementById("studentName");
+  state.studentName=input.value.trim() || "کارآگاه علمی";
+
+  showScreen("game");
+
+  requestAnimationFrame(()=>{
+    requestAnimationFrame(()=>{
+      const retry=()=>{
+        if(!resizeCanvas()){
+          setTimeout(retry,50);
+          return;
+        }
+
+        initBackground();
+        resetGameState();
+
+        gameRunning=true;
+        gamePaused=false;
+        questionActive=false;
+        lastTime=performance.now();
+        animationId=requestAnimationFrame(gameLoop);
+      };
+
+      retry();
+    });
+  });
+}
+
+document.getElementById("startBtn").addEventListener("click",startMission);
+
+document.getElementById("pauseBtn").addEventListener("click",()=>{
+  if(!gameRunning || questionActive) return;
+
+  gamePaused=!gamePaused;
+  document.getElementById("pauseOverlay").classList.toggle("show",gamePaused);
+
+  if(!gamePaused){
+    lastTime=performance.now();
+  }
+});
+
+document.getElementById("resumeBtn").addEventListener("click",()=>{
+  gamePaused=false;
+  document.getElementById("pauseOverlay").classList.remove("show");
+  lastTime=performance.now();
+});
+
+document.getElementById("homeBtn").addEventListener("click",()=>{
+  clearInterval(questionTimerId);
+  if(animationId) cancelAnimationFrame(animationId);
+  gameRunning=false;
+  questionActive=false;
+  showScreen("home");
+});
+
+document.getElementById("restartBtn").addEventListener("click",()=>{
+  clearInterval(questionTimerId);
+  if(animationId) cancelAnimationFrame(animationId);
+  gameRunning=false;
+  questionActive=false;
+  startMission();
+});
+
+document.getElementById("lessonGameBtn").addEventListener("click",()=>{
+  if(questionActive) return;
+  openLesson();
+});
+
+document.getElementById("homeLessonBtn").addEventListener("click",openLesson);
+document.getElementById("endLessonBtn").addEventListener("click",openLesson);
+
+function openLesson(){
+  document.getElementById("lessonModal").classList.add("show");
+  setLessonTab("show");
+}
+
+function closeLesson(){
+  document.getElementById("lessonModal").classList.remove("show");
+}
+
+document.getElementById("closeLesson").addEventListener("click",closeLesson);
+
+document.querySelectorAll(".tab").forEach(tab=>{
+  tab.addEventListener("click",()=>{
+    setLessonTab(tab.dataset.tab);
+  });
+});
+
+const lessonData={
+  show:{
+    title:"🎬 تماشاخانه",
+    html:`
+      <h3>زنگ علوم؛ شروع یک ماجراجویی</h3>
+      <p>در علوم، فقط حفظ کردن کافی نیست. دانش‌آموز مانند یک کاوشگر به اطراف خود با دقت نگاه می‌کند، سؤال می‌پرسد، حدس علمی می‌زند و با آزمایش به دنبال پاسخ می‌گردد.</p>
+      <div class="concept"><b>یادآوری مهم:</b> خوب دیدن و اندیشیدن، دو راه مهم برای شناخت عالم هستند.</div>
+      <p>در آزمایش فرفره، با تغییر <b>پهنای بال</b> و اندازه‌گیری <b>زمان رسیدن به زمین</b>، اثر یک متغیر را بررسی می‌کنیم.</p>
+    `
+  },
+  inquiry:{
+    title:"🔍 کاوشگری",
+    html:`
+      <h3>مراحل کاوشگری</h3>
+      <ol>
+        <li><b>مشاهده:</b> با دقت به پدیده نگاه می‌کنیم.</li>
+        <li><b>پرسش:</b> سؤال علمی مطرح می‌کنیم.</li>
+        <li><b>فرضیه:</b> یک حدس علمی و قابل آزمایش پیشنهاد می‌کنیم.</li>
+        <li><b>آزمایش:</b> فرضیه را با یک آزمایش بررسی می‌کنیم.</li>
+        <li><b>نتیجه‌گیری:</b> داده‌ها را بررسی و نتیجه را بیان می‌کنیم.</li>
+      </ol>
+      <div class="concept">دانشمند برای پاسخ دادن به پرسش‌ها از شواهد و آزمایش کمک می‌گیرد.</div>
+    `
+  },
+  hypothesis:{
+    title:"💡 فرضیه",
+    html:`
+      <h3>فرضیه چیست؟</h3>
+      <p>فرضیه یک <b>حدس علمی</b> است که می‌توانیم آن را با آزمایش بررسی کنیم.</p>
+      <div class="concept"><b>مثال:</b> «فرفره‌ای که بال پهن‌تری دارد، دیرتر به زمین می‌رسد.»</div>
+      <p>بعد از آزمایش ممکن است شواهد از فرضیه پشتیبانی کنند یا نشان دهند که باید آن را اصلاح کنیم.</p>
+    `
+  },
+  variables:{
+    title:"⚙️ متغیرها",
+    html:`
+      <h3>آزمایش منصفانه</h3>
+      <p>برای اینکه بفهمیم یک عامل چه اثری دارد، بهتر است در هر آزمایش فقط همان عامل را تغییر دهیم.</p>
+      <ul>
+        <li><b>متغیر تغییر داده‌شده:</b> چیزی که عمداً تغییر می‌دهیم؛ در آزمایش فرفره، پهنای بال.</li>
+        <li><b>چیزی که اندازه می‌گیریم:</b> زمان رسیدن فرفره به زمین.</li>
+        <li><b>متغیر ثابت:</b> چیزی که همانند جنس کاغذ ثابت نگه می‌داریم.</li>
+      </ul>
+      <div class="concept">اگر چند چیز را هم‌زمان تغییر دهیم، تشخیص علت نتیجه سخت می‌شود.</div>
+    `
+  },
+  conclusion:{
+    title:"📊 نتیجه‌گیری",
+    html:`
+      <h3>از داده‌ها چه می‌فهمیم؟</h3>
+      <p>پس از انجام آزمایش، داده‌ها را بررسی می‌کنیم و بر اساس شواهد نتیجه می‌گیریم.</p>
+      <div class="concept"><b>نتیجه آزمایش فرفره:</b> بال پهن‌تر باعث می‌شود فرفره معمولاً دیرتر به زمین برسد.</div>
+      <p>تکرار آزمایش به دقیق‌تر و قابل اعتمادتر شدن نتیجه کمک می‌کند.</p>
+    `
+  },
+  scientist:{
+    title:"🕵️ کار دانشمند",
+    html:`
+      <h3>دانشمند شبیه یک کارآگاه است</h3>
+      <p>کارآگاه برای حل یک ماجرا سرنخ جمع می‌کند. دانشمند هم برای پاسخ دادن به یک پرسش، مشاهده و آزمایش انجام می‌دهد و شواهد جمع می‌کند.</p>
+      <ul>
+        <li>با دقت مشاهده می‌کند.</li>
+        <li>پرسش مناسب می‌پرسد.</li>
+        <li>فرضیه می‌سازد.</li>
+        <li>آزمایش طراحی می‌کند.</li>
+        <li>داده‌ها را بررسی می‌کند.</li>
+        <li>نتیجه‌گیری می‌کند و در صورت نیاز فرضیه را اصلاح می‌کند.</li>
+      </ul>
+    `
+  },
+  objects:{
+    title:"🎒 راهنمای اشیاء",
+    html:`
+      <h3>وسایل داخل مأموریت</h3>
+      <div class="objects">
+        <div class="object-item"><b>💎</b><span>الماس<br>+۱۰ امتیاز</span></div>
+        <div class="object-item"><b>⭐</b><span>ستاره<br>+۲۰ امتیاز + سپر ۲ ثانیه‌ای</span></div>
+        <div class="object-item"><b>📖</b><span>کتاب<br>+۳۰ امتیاز</span></div>
+        <div class="object-item"><b>🧪</b><span>لوله آزمایش<br>+۱۵ امتیاز</span></div>
+        <div class="object-item"><b>🔬</b><span>میکروسکوپ<br>+۲۵ امتیاز</span></div>
+        <div class="object-item"><b>🧲</b><span>آهنربا<br>+۲۰ امتیاز</span></div>
+        <div class="object-item"><b>💣</b><span>بمب<br>−۱ جان</span></div>
+        <div class="object-item"><b>🔥</b><span>آتش<br>−۱ جان</span></div>
+        <div class="object-item"><b>☠️</b><span>سم<br>−۱ جان</span></div>
+        <div class="object-item"><b>⚡</b><span>برق<br>−۱ جان</span></div>
+      </div>
+    `
+  }
+};
+
+function setLessonTab(key){
+  document.querySelectorAll(".tab").forEach(tab=>{
+    tab.classList.toggle("active",tab.dataset.tab===key);
+  });
+
+  const data=lessonData[key];
+  document.getElementById("lessonContent").innerHTML=
+    `<h3>${data.title}</h3>${data.html}`;
+}
+
+document.getElementById("lessonModal").addEventListener("click",(e)=>{
+  if(e.target===document.getElementById("lessonModal")) closeLesson();
+});
+
+document.addEventListener("visibilitychange",()=>{
+  if(document.hidden){
+    if(gameRunning && !questionActive && !gamePaused){
+      gamePaused=true;
+      document.getElementById("pauseOverlay").classList.add("show");
+    }
+  }
+});
+
+window.addEventListener("resize",()=>{
+  if(gameScreen.classList.contains("active")){
+    resizeCanvas();
+  }
+});
+
+setLessonTab("show");
+</script>
+</body>
+</html>
